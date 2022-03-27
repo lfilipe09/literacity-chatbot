@@ -1,17 +1,30 @@
 const { addUser, existUser, findUserData } = require('./database/crud');
 const { onboarding } = require('./utils/onboarding')
 const { register } = require('./utils/register')
+const puppeteer = require('puppeteer');
 const venom = require('venom-bot');
 
-venom
-  .create({
-    session: 'session-name', //name of session
-    multidevice: false // for version not multidevice use false.(default: true)
-  })
-  .then((client) => start(client))
-  .catch((erro) => {
-    console.log(erro);
+const bot = async () => {
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ['--no-sandbox']
   });
+  const page = await browser.newPage();
+  await page.goto('https://www.google.com/', {
+    waitUntil: 'networkidle2'
+  });
+  await venom
+    .create({
+      session: 'session-name', //name of session
+      multidevice: false // for version not multidevice use false.(default: true)
+    })
+    .then((client) => start(client))
+    .catch((erro) => {
+      console.log(erro);
+    });
+  return 'Done';
+}
+
 
 function start(client) {
   client.onMessage((message) => {
@@ -38,3 +51,5 @@ function start(client) {
 
   });
 }
+
+module.exports = bot;
