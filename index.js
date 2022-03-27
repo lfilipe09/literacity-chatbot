@@ -22,7 +22,6 @@ const bot = async () => {
     .catch((erro) => {
       console.log(erro);
     });
-  return 'Done';
 }
 
 
@@ -51,5 +50,7 @@ function start(client) {
 
   });
 }
+
+bot()
 
 module.exports = bot;
