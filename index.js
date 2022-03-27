@@ -3,6 +3,7 @@ const { onboarding } = require('./utils/onboarding')
 const { register } = require('./utils/register')
 const puppeteer = require('puppeteer');
 const venom = require('venom-bot');
+const database = require('./database/db');
 
 const bot = async () => {
   const browser = await puppeteer.launch({
@@ -13,6 +14,8 @@ const bot = async () => {
   await page.goto('https://www.google.com/', {
     waitUntil: 'networkidle2'
   });
+  const resultado = await database.sync();
+  console.log(resultado);
   await venom
     .create({
       session: 'session-name', //name of session
